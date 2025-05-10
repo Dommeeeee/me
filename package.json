@@ -13,7 +13,7 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist"
   },
-  "homepage": "https://Dommeeeee.github.io/me",
+  "homepage": "https://dommeeeee.github.io/me/",
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
     "@radix-ui/react-accordion": "^1.2.2",
