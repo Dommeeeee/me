@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
 const BG_COLOR = "#0e0e0e";
-const AUDIO_SRC = "public\(Fear).mp3";
+const AUDIO_SRC = "/Fear.mp3";
 const COVER_URL = "https://www.dochord.com/wp-content/uploads/2025/04/PURPEECH-1.webp";
 
 function formatTime(seconds: number) {
