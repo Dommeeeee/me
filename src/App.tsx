@@ -80,6 +80,12 @@ export default function App() {
           </div>
         </div>
         {/* Discord Card */}
+        <a
+           href="https://discordapp.com/users/957001659022704690"
+           target="_blank"
+          rel="noopener noreferrer"
+           className="block"
+        >
         <div className="w-full flex flex-row items-center gap-3 p-3 mt-4 mb-2 rounded-xl glow-card-sm">
           <img
             src="https://i.imgur.com/oR46U0G.jpeg"
@@ -94,6 +100,7 @@ export default function App() {
             <img src="https://ext.same-assets.com/251775738/1520844421.svg" alt='' className="w-6 h-6 rounded" />
           </span>
         </div>
+        </a>
       </div>
     </div>
   );
