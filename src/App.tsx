@@ -1,8 +1,51 @@
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const BG_COLOR = "#0e0e0e";
+const AUDIO_SRC = "public\(Fear).mp3";
+const COVER_URL = "https://www.dochord.com/wp-content/uploads/2025/04/PURPEECH-1.webp";
+
+function formatTime(seconds: number) {
+  const mins = Math.floor(seconds / 60);
+  const secs = Math.floor(seconds % 60);
+  return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
+}
 
 export default function App() {
+  // Music Player State
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(29); // fallback: 29s only
+
+  const handlePlayPause = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    if (isPlaying) {
+      audio.pause();
+    } else {
+      audio.play();
+    }
+    setIsPlaying(!isPlaying);
+  };
+
+  const handleTimeUpdate = () => {
+    if (!audioRef.current) return;
+    setCurrentTime(audioRef.current.currentTime);
+  };
+
+  const handleLoadedMetadata = () => {
+    if (!audioRef.current) return;
+    setDuration(audioRef.current.duration);
+  };
+
+  const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = Number(e.target.value);
+    if (audioRef.current) {
+      audioRef.current.currentTime = val;
+      setCurrentTime(val);
+    }
+  };
+
   return (
     <div className="min-h-screen w-full flex flex-col items-center justify-start relative" style={{ background: BG_COLOR }}>
       <StarBackground />
@@ -40,7 +83,6 @@ export default function App() {
           <a href="https://www.roblox.com/users/1986108914/profile" target="_blank" rel="noopener noreferrer">
            <SocialIcon src="https://ext.same-assets.com/251775738/1439471720.svg" alt="Roblox" />
           </a>
-
         </div>
         {/* Roblox Card */}
         <div className="w-full flex flex-row items-center gap-3 p-3 mt-4 rounded-xl glow-card-sm">
@@ -60,30 +102,64 @@ export default function App() {
             </div>
           </div>
         </div>
-        {/* Music Card */}
-        <div className="w-full glow-card-sm p-4 mt-4 flex flex-col items-start">
+        {/* Music Card - ใช้ของจริง */}
+        <div className="w-full glow-card-sm p-4 mt-4 flex flex-col items-start bg-[#181818] rounded-2xl shadow-lg relative" style={{ boxShadow: "0 0 24px 6px #fff2, 0 1px 16px 2px #222c" }}>
           <div className="flex items-center mb-2 w-full">
-            <img src="https://www.dochord.com/wp-content/uploads/2025/04/PURPEECH-1.webp" alt="Monkey Juice Cover" className="w-12 h-12 rounded shadow-md mr-3" />
+            <img src={COVER_URL} alt="กลัวว่าฉันจะไม่เสียใจ Cover" className="w-12 h-12 rounded shadow-md mr-3 object-cover bg-[#232323]" />
             <div className="flex flex-col">
               <span className="text-white font-bold text-base leading-tight">กลัวว่าฉันจะไม่เสียใจ</span>
               <span className="text-gray-300 text-xs">Puepeech</span>
             </div>
-            <span className="ml-auto"><svg height="18" width="18" viewBox="0 0 24 24"><path fill="#fff" d="M4 22v-20h2v20zm7 0v-20h2v20zm7 0v-20h2v20z"/></svg></span>
+            <span className="ml-auto opacity-90"><svg height="18" width="18" viewBox="0 0 24 24"><path fill="#fff" d="M4 22v-20h2v20zm7 0v-20h2v20zm7 0v-20h2v20z"/></svg></span>
           </div>
           <div className="flex flex-row items-center gap-4 mt-1 w-full">
-            <button className="w-8 h-8 flex items-center justify-center bg-[#222] rounded-full border border-[#444] text-white text-lg"><svg width="20" height="20" viewBox="0 0 24 24"><path fill="#fff" d="M8 5v14l11-7z"/></svg></button>
-            <div className="flex-1 bg-[#222] rounded h-1 relative overflow-hidden mx-2">
-              <div className="absolute top-0 left-0 h-1 bg-blue-400" style={{ width: '35%' }} />
+            <button
+              aria-label={isPlaying ? "Pause" : "Play"}
+              onClick={handlePlayPause}
+              className="w-8 h-8 flex items-center justify-center bg-[#222] rounded-full border border-[#444] text-white text-lg transition hover:bg-[#333] focus:outline-none"
+            >
+              {isPlaying ? (
+                <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#fff" d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+              ) : (
+                <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#fff" d="M8 5v14l11-7z"/></svg>
+              )}
+            </button>
+            {/* Progress Bar with slider */}
+            <div className="flex-1 flex items-center h-4 relative mx-2">
+              <input
+                type="range"
+                min={0}
+                max={duration}
+                step={0.01}
+                value={currentTime}
+                onChange={handleSeek}
+                className="flex-1 appearance-none bg-[#222] rounded h-1 cursor-pointer"
+                style={{ accentColor: '#60a5fa' }}
+              />
+              {/* Overlay for colored played bar */}
+              <div className="absolute left-0 top-1/2 transform -translate-y-1/2 w-full h-1 pointer-events-none">
+                <div
+                  style={{ width: `${(currentTime / duration) * 100}%` }}
+                  className="h-1 bg-blue-400 rounded"
+                />
+              </div>
             </div>
-            <span className="text-xs text-gray-200">0:00</span>
-            <span className="text-xs text-gray-200">0:29</span>
+            <span className="text-xs text-gray-200" style={{ minWidth: 32 }}>{formatTime(currentTime)}</span>
+            <span className="text-xs text-gray-200" style={{ minWidth: 32 }}>{formatTime(duration)}</span>
           </div>
+          <audio
+            src={AUDIO_SRC}
+            ref={audioRef}
+            onLoadedMetadata={handleLoadedMetadata}
+            onTimeUpdate={handleTimeUpdate}
+            onEnded={() => setIsPlaying(false)}
+          />
         </div>
         {/* Discord Card */}
         <a
            href="https://discordapp.com/users/957001659022704690"
            target="_blank"
-          rel="noopener noreferrer"
+           rel="noopener noreferrer"
            className="block"
         >
         <div className="w-full flex flex-row items-center gap-3 p-3 mt-4 mb-2 rounded-xl glow-card-sm">
