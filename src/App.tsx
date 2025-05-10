@@ -63,10 +63,10 @@ export default function App() {
         {/* Music Card */}
         <div className="w-full glow-card-sm p-4 mt-4 flex flex-col items-start">
           <div className="flex items-center mb-2 w-full">
-            <img src="https://ext.same-assets.com/251775738/1685747639.jpeg" alt="Monkey Juice Cover" className="w-12 h-12 rounded shadow-md mr-3" />
+            <img src="https://www.dochord.com/wp-content/uploads/2025/04/PURPEECH-1.webp" alt="Monkey Juice Cover" className="w-12 h-12 rounded shadow-md mr-3" />
             <div className="flex flex-col">
-              <span className="text-white font-bold text-base leading-tight">MONKEY JUICE</span>
-              <span className="text-gray-300 text-xs">1Mill</span>
+              <span className="text-white font-bold text-base leading-tight">กลัวว่าฉันจะไม่เสียใจ</span>
+              <span className="text-gray-300 text-xs">Puepeech</span>
             </div>
             <span className="ml-auto"><svg height="18" width="18" viewBox="0 0 24 24"><path fill="#fff" d="M4 22v-20h2v20zm7 0v-20h2v20zm7 0v-20h2v20z"/></svg></span>
           </div>
